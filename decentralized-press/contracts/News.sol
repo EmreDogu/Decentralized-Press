@@ -17,7 +17,7 @@ contract News {
         uint256 id;
         string title;
         string description;
-        string coverImageHash;
+        string image;
         string date;
         address author;
         bool voted;
@@ -29,7 +29,7 @@ contract News {
         uint256 id,
         string title,
         string description,
-        string coverImageHash,
+        string image,
         string date,
         address author,
         bool voted,
@@ -54,12 +54,12 @@ contract News {
     function createNew(
         string memory _title,
         string memory _description,
-        string memory _coverImageHash,
+        string memory _image,
         string memory _date
     ) public {
-        require(bytes(_coverImageHash).length > 0);
         require(bytes(_title).length > 0);
         require(bytes(_description).length > 0);
+        //require(bytes(_image).length > 0);
         require(msg.sender != address(0));
 
         totalNews++;
@@ -71,7 +71,7 @@ contract News {
                 _newIds.current(),
                 _title,
                 _description,
-                _coverImageHash,
+                _image,
                 _date,
                 msg.sender,
                 false,
@@ -84,7 +84,7 @@ contract News {
             _newIds.current(),
             _title,
             _description,
-            _coverImageHash,
+            _image,
             _date,
             msg.sender,
             false,

@@ -20,6 +20,13 @@ async function main() {
   await news.deployed();
 
   console.log("News deployed to:", news.address);
+
+  saveAddress(news);
+}
+
+function saveAddress(contract) {
+  const fs = require("fs");
+  fs.writeFileSync("./src/artifacts/contracts/News.sol/address.json", JSON.stringify({address: contract.address}, undefined, 2));
 }
 
 // We recommend this pattern to be able to use async/await everywhere
