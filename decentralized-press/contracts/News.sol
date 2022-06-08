@@ -48,7 +48,16 @@ contract News {
     }
 
     function getNew(uint256 _id) public view returns (New memory) {
-        return news[_id];
+        return news[_id-1];
+    }
+
+    function vote(uint256 _id, string _vote) {
+        require(news[_id-1].voted==false);
+        if (_vote=="Approved") {
+            news[_id-1].approved += 1;
+        } else if (_vote=="Declined") {
+            news[_id-1].declined += 1;
+        }
     }
 
     function createNew(
