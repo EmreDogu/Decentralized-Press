@@ -1,41 +1,128 @@
 import { useState, useEffect } from 'react';
-import { ethers } from 'ethers'
+import { Header } from "./components/Header";
 import { Link } from "react-router-dom";
+import NewsList from "./components/NewsList";
 import getContract from "./utilities/getContract";
 
 function App() {
-  // store greeting in local state
-  const [New, setNewValue] = useState()
+  const [news, setNews] = useState([]);
+  const [currentAccount, setCurrentAccount] = useState("");
 
-  // request access to the user's MetaMask account
-  async function requestAccount() {
-    await window.ethereum.request({ method: 'eth_requestAccounts' });
-  }
+  const checkIfWalletIsConnected = async () => {
+    try {
+      const { ethereum } = window;
 
-  // call the smart contract, read the current greeting value
-  async function fetchNew() {
-    if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send('eth_requestAccounts', []);
-      const contract = await getContract();
-      try {
-        const data = await contract.getAllNews();
-        console.log('data: ', data);
-      } catch (err) {
-        console.log("Error: ", err);
+      const accounts = await ethereum.request({ method: "eth_accounts" });
+
+      if (accounts.length !== 0) {
+        const account = accounts[0];
+        setCurrentAccount(account);
+        alert("Wallet is Connected!");
+      } else {
+        alert("To write a new, Ensure your wallet Connected!");
       }
-    }    
-  }
+    } catch (err) {
+      console.log(`${err.message}`);
+    }
+  };
+
+  const connectWallet = async () => {
+    try {
+      const { ethereum } = window;
+
+      if (!ethereum) {
+        alert("Make sure you have MetaMask Connected");
+        return;
+      }
+
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      setCurrentAccount(accounts[0]);
+    } catch (err) {
+      console.log(`${err.message}`);
+    }
+  };
+
+  const getNews = async () => {
+    try {
+      const contract = await getContract();
+      const AllNews = await contract.getAllNews();
+
+      const formattedNew = AllNews.map((New) => {
+        return {
+          id: New.id,
+          title: New.title,
+          description: New.description,
+          image: New.image,
+          author: New.author,
+          date: new Date(New.date * 1000),
+        };
+      });
+      setNews(formattedNew);
+    } catch (err) {
+      console.log(`${err.message}`);
+    }
+  };
+
+  useEffect(() => {
+    getNews();
+    checkIfWalletIsConnected();
+
+    const onNewCreated = async (
+      id,
+      title,
+      description,
+      image,
+      date,
+      author
+    ) => {
+      setNews((prevState) => [
+        ...prevState,
+        {
+          id,
+          title,
+          description,
+          image,
+          date,
+          author,
+        },
+      ]);
+    };
+
+    let contract;
+
+    if (window.ethereum) {
+      contract = getContract();
+      contract.on("NewCreated", onNewCreated);
+    }
+
+    return () => {
+      if (contract) {
+        contract.off("NewCreated", onNewCreated);
+      }
+    };
+  }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <button onClick={fetchNew}>Fetch New</button>
-        <Link to="/writing">
-          <button>Write a New</button>
-        </Link>
-        <input onChange={e => setNewValue(e.target.value)} placeholder="Set new" />
-      </header>
+    <div>
+      <div>
+        <Header
+          currentAccount={currentAccount}
+          connectWallet={connectWallet}
+        />
+        <div>
+          {news.map((New, index) => {
+            return (
+              <Link to={`/New?id=${New.id}`} key={index}>
+                <div>
+                  <NewsList New={New} />
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
