@@ -4,13 +4,14 @@ export default function UnvotedNew({ news }) {
   return (
     <div>
       <img
+        src={`https://ipfs.infura.io/ipfs/${news.image}`}
         alt="image"
       />
       <div>
         <div>
           <h3>{news.title}</h3>
           <p >
-            {news.date}
+            Date: {news.date}
           </p>
         </div>
       </div>

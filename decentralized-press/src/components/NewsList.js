@@ -4,6 +4,7 @@ export default function NewsList({ New }) {
   return (
     <div>
       <img
+        src={`https://ipfs.infura.io/ipfs/${New.image}`}
         alt="image"
       />
       <div>

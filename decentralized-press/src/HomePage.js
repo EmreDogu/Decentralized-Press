@@ -51,7 +51,9 @@ function App() {
       let votedNews = [];
       for (let i=0; i < AllNews.length; ++i) {
         if (AllNews[i].voted) {
+          if (AllNews[i].approved==2) {
             votedNews.push(AllNews[i]);
+          }
         }
     }
 

@@ -44,17 +44,13 @@ export default function NewsPage() {
 
     return (
         <div>
+            <div>{news && <New news={news} />}</div>
             <div>
-                <div>
-                    <div>{news && <New news={news} />}</div>
-                    <div>
-                        <Link to="/">
-                            <button>
-                                Go Back
-                            </button>
-                        </Link>
-                    </div>
-                </div>
+                <Link to="/">
+                    <button>
+                        Go Back
+                    </button>
+                </Link>
             </div>
         </div>
     );

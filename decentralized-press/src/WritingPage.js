@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { create } from "ipfs-http-client";
 import getContract from "./utilities/getContract";
 
 export default function Writing() {
@@ -6,23 +7,36 @@ export default function Writing() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
 
+  const client = create("https://ipfs.infura.io:5001/api/v0");
   const ImageRef = useRef();
 
   const handleSubmit = async () => {
     if (
       title === "" ||
-      description === "" /*||
-      image === ""*/
+      description === "" ||
+      image === ""
     ) {
       alert("All the fields must be filled!");
       return;
     } else {
-      saveFeed();
+      uploadImage(image);
     }
   };
 
-  const saveFeed = async () => {
-    alert("Saving Feed...");
+  const uploadImage = async (image) => {
+    alert("Uploading Image...");
+
+    try {
+      const img = await client.add(image);
+      await saveNew(img.path);
+
+    } catch (err) {
+      alert("Error While Uploading Image");
+    }
+  };
+
+  const saveNew = async (image) => {
+    alert("Saving New...");
 
     console.log(title, description, image);
 
@@ -31,9 +45,6 @@ export default function Writing() {
       const UploadedDate = String(new Date());
       console.log(contract);
 
-      /*
-       * Save the new feed to the blockchain
-       */
       await contract.createNew(
         title,
         description,
@@ -43,25 +54,21 @@ export default function Writing() {
 
       alert("New Saved Successfully");
 
-      // reset form
       setTitle("");
       setDescription("");
       setImage("");
 
-      // Redirect to Home Page
       window.location.href = "/";
     } catch (err) {
       console.log(err, "Error Saving Feed");
     }
   };
 
-  // Handles redirect to Home Page or previous page
   const goBack = () => {
     window.history.back();
   };
 
   return (
-    //return düzenle
     <div>
       <div>
         <div>
@@ -98,33 +105,35 @@ export default function Writing() {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Write your article here!"
           />
-
-          <div>
-            <label>
-              Image
-            </label>
-            <div
-              onClick={() => {
-                ImageRef.current.click();
-              }}
-            >
+          <label>
+            Image
+          </label>
+          <div
+            onClick={() => {
+              ImageRef.current.click();
+            }}
+          >
+            {image ? (
               <img
                 onClick={() => {
                   ImageRef.current.click();
                 }}
+                src={URL.createObjectURL(image)}
                 alt="image"
               />
-            </div>
-
-            <input
-              type="file"
-              className="hidden"
-              ref={ImageRef}
-              onChange={(e) => {
-                setImage(e.target.files[0]);
-              }}
-            />
+            ) : (
+              <div>No Image</div>
+            )}
           </div>
+
+          <input
+            type="file"
+            className="hidden"
+            ref={ImageRef}
+            onChange={(e) => {
+              setImage(e.target.files[0]);
+            }}
+          />
         </div>
       </div>
     </div>

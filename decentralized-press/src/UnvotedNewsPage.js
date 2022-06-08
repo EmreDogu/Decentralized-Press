@@ -44,42 +44,42 @@ export default function NewsPage() {
 
     const handleSubmit = async () => {
         if (
-          vote === "" 
+            vote === ""
         ) {
-          alert("A vote must be selected!");
-          return;
+            alert("A vote must be selected!");
+            return;
         } else {
-          saveVote();
+            saveVote();
         }
-      };
-    
-      const saveVote = async () => {
-        alert("Submitting vote...");
-    
-        console.log(vote);
-    
-        try {
-          const contract = await getContract();
-          console.log(contract);
-    
-          await contract.vote(
-            news.id,
-            vote
-          );
+    };
 
-          console.log(news.approved, news.declined);
-    
-          alert("Vote Submitted Successfully");
-    
-          // reset form
-          setVote("");
-    
-          // Redirect to Voting Page
-          window.location.href = "/voting";
+    const saveVote = async () => {
+        alert("Submitting vote...");
+
+        console.log(vote);
+
+        try {
+            const contract = await getContract();
+            console.log(contract);
+
+            await contract.vote(
+                news.id,
+                vote
+            );
+
+            console.log(news.approved, news.declined);
+
+            alert("Vote Submitted Successfully");
+
+            // reset form
+            setVote("");
+
+            // Redirect to Voting Page
+            window.location.href = "/voting";
         } catch (err) {
-          console.log(err, "Error Saving Feed");
+            console.log(err, "Error Saving Feed");
         }
-      };
+    };
 
     useEffect(() => {
         getNews();
@@ -87,31 +87,27 @@ export default function NewsPage() {
 
     return (
         <div>
+            <div>{news && <UnvotedNew news={news} />}</div>
             <div>
-                <div>
-                    <div>{news && <UnvotedNew news={news} />}</div>
-                    <div>
-                        <Link to="/">
-                            <button>
-                                Go Back
-                            </button>
-                        </Link>
-                        <select
-                            value={vote}
-                            onChange={(e) => setVote(e.target.value)}
-                        >
-                            <option>Approved</option>
-                            <option>Declined</option>
-                        </select>
-                        <button
-                            onClick={() => {
-                                handleSubmit();
-                            }}
-                        >
-                            <p>Submit Vote</p>
-                        </button>
-                    </div>
-                </div>
+                <Link to="/">
+                    <button>
+                        Go Back
+                    </button>
+                </Link>
+                <select
+                    value={vote}
+                    onChange={(e) => setVote(e.target.value)}
+                >
+                    <option>Approved</option>
+                    <option>Declined</option>
+                </select>
+                <button
+                    onClick={() => {
+                        handleSubmit();
+                    }}
+                >
+                    <p>Submit Vote</p>
+                </button>
             </div>
         </div>
     );

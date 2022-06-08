@@ -72,7 +72,7 @@ contract News {
     ) public {
         require(bytes(_title).length > 0);
         require(bytes(_description).length > 0);
-        //require(bytes(_image).length > 0);
+        require(bytes(_image).length > 0);
         require(msg.sender != address(0));
 
         totalNews++;
