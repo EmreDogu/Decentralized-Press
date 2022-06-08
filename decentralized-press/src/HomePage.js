@@ -19,7 +19,7 @@ function App() {
         setCurrentAccount(account);
         alert("Wallet is Connected!");
       } else {
-        alert("To write a new, Ensure your wallet Connected!");
+        alert("To write or vote a new, Ensure your wallet Connected!");
       }
     } catch (err) {
       console.log(`${err.message}`);
@@ -48,8 +48,14 @@ function App() {
     try {
       const contract = await getContract();
       const AllNews = await contract.getAllNews();
+      let votedNews = [];
+      for (let i=0; i < AllNews.length; ++i) {
+        if (AllNews[i].voted) {
+            votedNews.push(AllNews[i]);
+        }
+    }
 
-      const formattedNew = AllNews.map((New) => {
+      const formattedNew = votedNews.map((New) => {
         return {
           id: New.id,
           title: New.title,
@@ -68,40 +74,6 @@ function App() {
   useEffect(() => {
     getNews();
     checkIfWalletIsConnected();
-
-    const onNewCreated = async (
-      id,
-      title,
-      description,
-      image,
-      date,
-      author
-    ) => {
-      setNews((prevState) => [
-        ...prevState,
-        {
-          id,
-          title,
-          description,
-          image,
-          date,
-          author,
-        },
-      ]);
-    };
-
-    let contract;
-
-    if (window.ethereum) {
-      contract = getContract();
-      contract.on("NewCreated", onNewCreated);
-    }
-
-    return () => {
-      if (contract) {
-        contract.off("NewCreated", onNewCreated);
-      }
-    };
   }, []);
 
   return (

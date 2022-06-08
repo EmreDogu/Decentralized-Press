@@ -22,6 +22,11 @@ export const Header = ({ currentAccount, connectWallet }) => {
               <span>Write a New</span>
             </button>
           </Link>
+          <Link to="/voting">
+            <button>
+              <span>Vote a New</span>
+            </button>
+          </Link>
         </div>
       ) : (
         <div>
