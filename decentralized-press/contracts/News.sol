@@ -23,6 +23,7 @@ contract News {
         bool voted;
         int approved;
         int declined;
+        address[] voters;
     }
 
     event NewCreated(
@@ -34,7 +35,8 @@ contract News {
         address author,
         bool voted,
         int approved,
-        int declined
+        int declined,
+        address[] voters
     );
 
     New[] news;
@@ -55,8 +57,10 @@ contract News {
         require(news[_id-1].voted==false);
         if (keccak256(bytes(_vote)) == keccak256(bytes("Approved"))) {
             news[_id-1].approved += 1;
+            news[_id-1].voters.push(payable(msg.sender));
         } else if (keccak256(bytes(_vote)) == keccak256(bytes("Declined"))) {
             news[_id-1].declined += 1;
+            news[_id-1].voters.push(payable(msg.sender));
         }
 
         if (news[_id-1].approved == 2 || news[_id-1].declined == 2) {
@@ -89,7 +93,8 @@ contract News {
                 msg.sender,
                 false,
                 0,
-                0
+                0,
+                new address[](0)
             )
         );
 
@@ -102,7 +107,8 @@ contract News {
             msg.sender,
             false,
             0,
-            0
+            0,
+            new address[](0)
         );
     }
 }

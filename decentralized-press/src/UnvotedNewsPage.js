@@ -5,7 +5,7 @@ import UnvotedNew from "./components/UnvotedNew";
 
 export default function NewsPage() {
     const [news, setNews] = useState([]);
-    const [vote, setVote] = useState("");
+    const [vote, setVote] = useState("Approved");
 
     const getUrlValue = () => {
         let vars = {};
@@ -72,7 +72,7 @@ export default function NewsPage() {
             alert("Vote Submitted Successfully");
 
             // reset form
-            setVote("");
+            setVote("Approved");
 
             // Redirect to Voting Page
             window.location.href = "/voting";
@@ -89,7 +89,7 @@ export default function NewsPage() {
         <div>
             <div>{news && <UnvotedNew news={news} />}</div>
             <div>
-                <Link to="/">
+                <Link to="/voting">
                     <button>
                         Go Back
                     </button>

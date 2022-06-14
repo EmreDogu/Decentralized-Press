@@ -18,6 +18,7 @@ function App() {
                 const account = accounts[0];
                 setCurrentAccount(account);
                 alert("Wallet is Connected!");
+                getNews(account);
             } else {
                 alert("To write or vote a new, Ensure your wallet Connected!");
             }
@@ -44,13 +45,24 @@ function App() {
         }
     };
 
-    const getNews = async () => {
+    const getNews = async (account) => {
         try {
             const contract = await getContract();
             const AllNews = await contract.getAllNews();
             let unvotedNews = [];
+            let lowerVoters = [...Array(AllNews.length)].map(e => Array(4).fill(0));
+            let lowerAuthors = [...Array(AllNews.length)].map(e => Array(1).fill(0));
+            
             for (let i = 0; i < AllNews.length; ++i) {
-                if (!AllNews[i].voted) {
+                lowerAuthors[i].push(AllNews[i].author.toLowerCase());
+
+                AllNews[i].voters.forEach((voter) => {
+                    lowerVoters[i].push(voter.toLowerCase());
+                  })
+            }
+
+            for (let i = 0; i < AllNews.length; ++i) {
+                if (!AllNews[i].voted && !lowerVoters[i].includes(account) && !lowerAuthors[i].includes(account) && account != "0x90F79bf6EB2c4f870365E785982E1f101E93b906") {
                     unvotedNews.push(AllNews[i]);
                 }
             }
@@ -72,7 +84,6 @@ function App() {
     };
 
     useEffect(() => {
-        getNews();
         checkIfWalletIsConnected();
     }, []);
 

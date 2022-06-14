@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { create } from "ipfs-http-client";
 import getContract from "./utilities/getContract";
 
@@ -6,9 +6,31 @@ export default function Writing() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
+  const [currentAccount, setCurrentAccount] = useState("");
 
   const client = create("https://ipfs.infura.io:5001/api/v0");
   const ImageRef = useRef();
+
+  useEffect(() => {
+    checkIfWalletIsConnected();
+  }, []);
+
+  const checkIfWalletIsConnected = async () => {
+    try {
+      const { ethereum } = window;
+
+      const accounts = await ethereum.request({ method: "eth_accounts" });
+
+      if (accounts.length !== 0) {
+        const account = accounts[0];
+        setCurrentAccount(account);
+      } else {
+        window.history.back();
+      }
+    } catch (err) {
+      console.log(`${err.message}`);
+    }
+  };
 
   const handleSubmit = async () => {
     if (
@@ -18,7 +40,9 @@ export default function Writing() {
     ) {
       alert("All the fields must be filled!");
       return;
-    } else {
+    } else if (currentAccount === "0x90f79bf6eb2c4f870365e785982e1f101e93b906"){ 
+      alert("Can't use bank account for making news");
+    }else {
       uploadImage(image);
     }
   };
@@ -119,7 +143,7 @@ export default function Writing() {
                   ImageRef.current.click();
                 }}
                 src={URL.createObjectURL(image)}
-                alt="image"
+                alt="new image"
               />
             ) : (
               <div>No Image</div>

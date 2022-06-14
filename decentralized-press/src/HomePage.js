@@ -74,8 +74,8 @@ function App() {
   };
 
   useEffect(() => {
-    getNews();
     checkIfWalletIsConnected();
+    getNews();
   }, []);
 
   return (
