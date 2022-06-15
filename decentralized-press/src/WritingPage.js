@@ -40,7 +40,7 @@ export default function Writing() {
     ) {
       alert("All the fields must be filled!");
       return;
-    } else if (currentAccount === "0x90f79bf6eb2c4f870365e785982e1f101e93b906"){ 
+    } else if (currentAccount === "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"){ 
       alert("Can't use bank account for making news");
     }else {
       uploadImage(image);
@@ -82,7 +82,12 @@ export default function Writing() {
       setDescription("");
       setImage("");
 
-      window.location.href = "/";
+      alert("You will be redirected to main page in 10 seconds, please wait");
+
+      setTimeout(() => {
+        window.location.href = "/";
+     }, 10000);
+
     } catch (err) {
       console.log(err, "Error Saving Feed");
     }

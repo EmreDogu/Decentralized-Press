@@ -6,6 +6,28 @@ import UnvotedNew from "./components/UnvotedNew";
 export default function NewsPage() {
     const [news, setNews] = useState([]);
     const [vote, setVote] = useState("Approved");
+    const [currentAccount, setCurrentAccount] = useState("");
+
+    useEffect(() => {
+        checkIfWalletIsConnected();
+      }, []);
+    
+      const checkIfWalletIsConnected = async () => {
+        try {
+          const { ethereum } = window;
+    
+          const accounts = await ethereum.request({ method: "eth_accounts" });
+    
+          if (accounts.length !== 0) {
+            const account = accounts[0];
+            setCurrentAccount(account);
+          } else {
+            window.history.back();
+          }
+        } catch (err) {
+          console.log(`${err.message}`);
+        }
+      };
 
     const getUrlValue = () => {
         let vars = {};
@@ -48,7 +70,9 @@ export default function NewsPage() {
         ) {
             alert("A vote must be selected!");
             return;
-        } else {
+        } else if (currentAccount === "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"){ 
+            alert("Can't use bank account for voting news");
+        }else {
             saveVote();
         }
     };
@@ -71,11 +95,14 @@ export default function NewsPage() {
 
             alert("Vote Submitted Successfully");
 
-            // reset form
             setVote("Approved");
 
-            // Redirect to Voting Page
-            window.location.href = "/voting";
+            alert("You will be redirected to voting page in 10 seconds, please wait");
+
+            setTimeout(() => {
+                window.location.href = "/voting";
+             }, 10000);
+            
         } catch (err) {
             console.log(err, "Error Saving Feed");
         }

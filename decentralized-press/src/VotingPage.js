@@ -62,7 +62,7 @@ function App() {
             }
 
             for (let i = 0; i < AllNews.length; ++i) {
-                if (!AllNews[i].voted && !lowerVoters[i].includes(account) && !lowerAuthors[i].includes(account) && account != "0x90F79bf6EB2c4f870365E785982E1f101E93b906") {
+                if (!AllNews[i].voted && !lowerVoters[i].includes(account) && !lowerAuthors[i].includes(account) && account != "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266") {
                     unvotedNews.push(AllNews[i]);
                 }
             }
