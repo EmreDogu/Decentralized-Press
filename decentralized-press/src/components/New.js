@@ -2,26 +2,23 @@ import React from "react";
 
 export default function New({ news }) {
   return (
-    <div>
-      <img
-        src={`https://ipfs.infura.io/ipfs/${news.image}`}
+      <div>
+        <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
+          <h2>{news.title}</h2>
+          <img
+        src={`https://ipfs.infura.io/ipfs/${news.image}`} width="50%" height="50%" align="middle"
         alt="image"
       />
-      <div>
-        <div>
-          <h3>{news.title}</h3>
-          <p >
+          <p style={{marginBottom:"0px"}}>
             Date: {news.date}
+          </p>
+          <p>
+            Author: {news?.author}
+          </p>
+          <p style={{textAlign:"center", width:"50%"}}>
+            {news.description}
           </p>
         </div>
       </div>
-
-      <div>
-        <div>
-          Author: {news?.author?.slice(0, 12)}...
-        </div>
-      </div>
-      <p>{news.description}</p>
-    </div>
   );
 }

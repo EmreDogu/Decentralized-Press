@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
-import HomePage from "./HomePage";
-import Writing from "./WritingPage";
-import News from "./NewsPage";
-import Voting from "./VotingPage";
-import UnvotedNew from "./UnvotedNewsPage";
+import HomePage from "./pages/HomePage";
+import Writing from "./pages/WritingPage";
+import News from "./pages/NewsPage";
+import Voting from "./pages/VotingPage";
+import UnvotedNew from "./pages/UnvotedNewsPage";
 
 function App() {
   return (

@@ -3,21 +3,15 @@ import React from "react";
 export default function NewsList({ New }) {
   return (
     <div>
-      <img
-        src={`https://ipfs.infura.io/ipfs/${New.image}`}
-        alt="image"
-      />
-      <div>
-        <h4>
+      <div style={{display:"flex", 
+      backgroundImage: `url("https://ipfs.infura.io/ipfs/${New.image}")`, backgroundSize: "cover", height:"200px", width:"300px", alignItems:"center", justifyItems:"center"}}>
+        <h3 style={{color:"#ffffff", backgroundColor:"rgba(0,0,0,0.25)"}}>
           {New.title}
-        </h4>
-          <p>
-            {New.description.slice(0, 30)}...
-          </p>
-        <p>
-          {New?.author?.slice(0, 12)}...{" "}
-        </p>
+        </h3>
       </div>
+      <p style={{color:"black"}}>
+          <b>{New.description.slice(0, 72)}...</b>
+      </p>
     </div>
   );
 }

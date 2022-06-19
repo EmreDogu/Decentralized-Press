@@ -37,8 +37,8 @@
       ]
     },
     "C:\\Users\\Emre\\Desktop\\Decentralized-Press\\decentralized-press\\contracts\\News.sol": {
-      "lastModificationDate": 1655331210675,
-      "contentHash": "7ca8cf83311d8f7e787cbfd3391fae47",
+      "lastModificationDate": 1655331449897,
+      "contentHash": "a5ffaea3d2f2409ba94bb63e0f78ce2d",
       "sourceName": "contracts/News.sol",
       "solcConfig": {
         "version": "0.8.4",
